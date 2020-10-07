@@ -1,4 +1,6 @@
-import time
+#
+# © 2020 Nabeel Albishry (nalbishry@kau.edu.sa)
+#
 
 class NuumberConv(object):
 
