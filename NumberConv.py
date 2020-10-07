@@ -85,7 +85,7 @@ class NuumberConv(object):
 				print('index->', i * -1 - 1, ', input->', fractional0, ', output->', results)
 				fractional -= int(fractional)
 
-		# print('from Decimal to Binary:',results)
+		
 		return results
 
 	def any_to_decimal(self, user_input, input_base):
@@ -108,7 +108,7 @@ class NuumberConv(object):
 		print('Fractional part:', fractional)
 		print(color.RED + '-------Integral-------' + color.END)
 
-		# print('initial frac:',fractional)
+		
 		integer = integer[::-1]
 		for index, i in enumerate(integer):
 			if input_base == 16 and i.lower() in ['a', 'b', 'c', 'd', 'e', 'f']:
@@ -143,7 +143,7 @@ class NuumberConv(object):
 				else:
 
 					fractional = int(i)
-				# print(fractional,int(i))
+				
 				t = (1 / (int(input_base) ** (index + 1))) * int(i)
 				print('index->', index * -1 - 1, ', input->', i, ', output->', t)
 				results_fr += t
@@ -164,17 +164,6 @@ class color:
    UNDERLINE = '\033[4m'
    END = '\033[0m'
 
-   # PURPLE = ''#''\033[95m'
-   # CYAN = ''#''\033[96m'
-   # DARKCYAN = ''#'\033[36m'
-   # BLUE = ''#'\033[94m'
-   # GREEN = ''#'\033[92m'
-   # YELLOW = ''#'\033[93m'
-   # RED = ''#'\033[91m'
-   # BOLD = ''#\033[1m'
-   # UNDERLINE = ''#'\033[4m'
-   # END = ''#'\033[0m'
-
 if __name__=='__main__':
 	EnterMore = True
 	nc = NuumberConv()
@@ -190,9 +179,6 @@ if __name__=='__main__':
 			output = nc.decimal_to_any(str(user_input), output_base)
 		else:
 			output = nc.any_to_decimal(str(user_input), input_base)
-
-		#output = nc.decimal_to_any(str(user_input), output_base)
-		#output = nc.any_to_decimal(str(user_input), input_base)
 
 		print('The output: ',output)
 		print('============================================')
