@@ -166,26 +166,28 @@ class color:
    END = '\033[0m'
 
 if __name__=='__main__':
-    EnterMore = True
-    nc = NuumberConv()
+	EnterMore = True
+	nc = NuumberConv()
 
-    while EnterMore:
-        print('============================================')
-        input_base = int(input('Input Base (2,8,16,10): '))
-        output_base = int(input('Output Base (2,8,16,10): '))
-        user_input = input('Number to convert: ')
-        
-        #output=None
-        if nc.validate(user_input,input_base,output_base):
-            if input_base==10:
-                output = nc.decimal_to_any(str(user_input), output_base)
-            else:
-                output = nc.any_to_decimal(str(user_input), input_base)
+	while EnterMore:
+		print('============================================')
+		input_base = int(input('Input Base (2,8,16,10): '))
+		output_base = int(input('Output Base (2,8,16,10): '))
+		user_input = input('Number to convert: ')
+		#output=None
+		if nc.validate(user_input,input_base,output_base):
+			if input_base==10:
+				output = nc.decimal_to_any(str(user_input), output_base)
+			elif output_base==10:
+				output = nc.any_to_decimal(str(user_input), input_base)
+			else:
+				result = nc.any_to_decimal(user_input, input_base)
+				output = nc.decimal_to_any(result, output_base)
 
-            print('The output: ',output)
-            print('============================================')
-            repeatq = input('Do you want to continue?')
-            if repeatq.lower() in ['1','y','yes','yep']:
-                EnterMore=True
-            else:
-                EnterMore=False
+			print('The output: ',output)
+			print('============================================')
+			repeatq = input('Do you want to continue?')
+			if repeatq.lower() in ['1','y','yes','yep']:
+				EnterMore=True
+			else:
+				EnterMore=False
