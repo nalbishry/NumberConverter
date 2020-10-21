@@ -1,6 +1,7 @@
 # NumberConverter
 A Python-based little tool for number conversion between number systems (Decimal, Binary, Octal, Hexadecimal).<br/>
-To convert between different formats other than decimal, first use decimal then convert again. 
+Python 3.x
+
 <br/>
 ## Usage 
 The file can be used in two ways:<br/>
