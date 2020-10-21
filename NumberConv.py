@@ -27,7 +27,7 @@ class NuumberConv(object):
 				return False
         
 		return True
-        
+
 	def decimal_to_any(self, user_input, output_base):
 		hex_helper_dict = {10: 'A', 11: 'B', 12: 'C', 13: 'D', 14: 'E', 15: 'F'}
 
@@ -43,7 +43,7 @@ class NuumberConv(object):
 		remainder = 0
 
 		if len(parts) > 1:
-			fractional =  float('0.'+parts[1])
+			fractional = float('0.' + parts[1])
 		else:
 			fractional = 0
 
@@ -77,9 +77,10 @@ class NuumberConv(object):
 		if fractional > 0:
 			results += '.'
 			print(color.RED + '-------Fractional-------' + color.END)
-			for i in range(4):
-				fractional0 = fractional
+			for i in range(10):
+				fractional0 = round(fractional, 6)
 				fractional *= output_base
+				fractional = round(fractional, 6)
 
 				if int(fractional) > 9 and output_base == 16:
 					results += str(hex_helper_dict[int(fractional)])
@@ -88,14 +89,16 @@ class NuumberConv(object):
 
 				print('index->', i * -1 - 1, ', input->', fractional0, ', output->', results)
 				fractional -= int(fractional)
+				if fractional == 0:
+					break
 
-		
 		return results
 
 	def any_to_decimal(self, user_input, input_base):
+
 		hex_helper_dict = {'a': 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15}
 
-		user_input = user_input
+		user_input = str(user_input)
 		parts = user_input.split('.')
 		integer = parts[0]
 		# print(integer)
@@ -104,37 +107,29 @@ class NuumberConv(object):
 		results = 0
 
 		if len(parts) > 1:
-			fractional = parts[1]
+			fractional = str(parts[1])
 		else:
-			fractional = ''
+			fractional = None
 		print('Converting {} from base {} to base {}'.format(user_input, input_base, 10))
 		print('Integral part:', integer)
 		print('Fractional part:', fractional)
 		print(color.RED + '-------Integral-------' + color.END)
 
-		
+		# print('initial frac:',fractional)
 		integer = integer[::-1]
 		for index, i in enumerate(integer):
 			if input_base == 16 and i.lower() in ['a', 'b', 'c', 'd', 'e', 'f']:
 				i = hex_helper_dict[i.lower()]
-
+				print(i)
 			else:
 				integer = int(i)
 
-
-
-			try:
-				t = ((int(input_base)) ** index) * (int(i))
-			except:
-				print(type(input_base), input_base)
-				print(type(index), index)
-				print(type(i), i)
-
+			t = (input_base ** index) * int(i)
 			print('index->', index, ', input->', i, ', output->', t)
-			results += t
+			results += (input_base ** index) * int(i)
 		print('Results for integer:', results)
 
-		if len(fractional)>0:
+		if fractional:
 			print(color.RED + '-------Fractional-------' + color.END)
 			results_fr = 0
 			for index, i in enumerate(fractional):
@@ -143,12 +138,10 @@ class NuumberConv(object):
 					continue
 				if input_base == 16 and i.lower() in ['a', 'b', 'c', 'd', 'e', 'f']:
 					i = hex_helper_dict[i.lower()]
-
 				else:
-
 					fractional = int(i)
-				
-				t = (1 / (int(input_base) ** (index + 1))) * int(i)
+
+				t = round((1 / (input_base ** (index + 1))) * int(i), 10)
 				print('index->', index * -1 - 1, ', input->', i, ', output->', t)
 				results_fr += t
 			print('Results for fractional:', results_fr)
