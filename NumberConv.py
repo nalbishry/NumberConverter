@@ -2,7 +2,7 @@
 # © 2020 Nabeel Albishry (nalbishry@kau.edu.sa)
 #
 
-class NuumberConv(object):
+class NumberConv(object):
 
 	def __init__(self):
 		pass
@@ -167,7 +167,7 @@ class color:
 
 if __name__=='__main__':
 	EnterMore = True
-	nc = NuumberConv()
+	nc = NumberConv()
 
 	while EnterMore:
 		print('============================================')
