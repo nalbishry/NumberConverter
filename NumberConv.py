@@ -7,7 +7,7 @@ class NuumberConv(object):
 	def __init__(self):
 		pass
 
-	def validate(self,user_input,input_base):
+	def validate(self,user_input, input_base, output_base):
 		validation_dict = {
 			2:'.01',
 			8:'.01234567',
@@ -16,11 +16,15 @@ class NuumberConv(object):
 		}
 
 		# 1) Validate input base
-		if int(input_base) not in [2,8,10,16]:
+		if int(input_base) not in validation_dict.keys():
 			print('The input base is not permitted. Only 2, 8, 10 and 16 are accepted')
 			return False
 
-		# 2) Validate input alignment with base
+		# 2) Validate output base
+		if int(output_base) not in validation_dict.keys():
+			print('The Output base is not permitted. Only 2, 8, 10 and 16 are accepted')
+
+		# 3) Validate input alignment with base
 		for i in str(user_input):
 			if i not in validation_dict[input_base]:
 				print('The input number does not match with the input base you entered')
@@ -172,7 +176,7 @@ if __name__=='__main__':
         user_input = input('Number to convert: ')
         
         #output=None
-        if nc.validate(user_input,input_base):
+        if nc.validate(user_input,input_base,output_base):
             if input_base==10:
                 output = nc.decimal_to_any(str(user_input), output_base)
             else:
