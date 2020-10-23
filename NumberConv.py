@@ -213,6 +213,46 @@ class NumberRepresentations(object):
 				twos += str(i)
 		return twos[::-1]
 
+	def normalise_binary(self,input_number):
+		'''
+		Normalise binary number to the form on 1.xxxxx
+		Return:
+		[0] normalised_number:int
+		[1] number of shifts made (-/+)
+		'''
+		if type(input_number) is not str:
+			print('String format only')
+			return False
+
+		try:
+			integer, fractional = input_number.split('.')
+		except:
+			integer = input_number
+			fractional = ''
+		if len(integer) > 1:
+			shift = len(integer) - 1
+
+			normalised = integer[0] + '.' + integer[1:] + fractional
+			return normalised, shift
+
+		else:
+			if int(integer) == 1:
+				normalised = input_number
+				shift = 0
+				return normalised, shift
+
+			else:
+				shift = 0
+				for l in fractional:
+					if int(l) == 0:
+						shift += 1
+						continue
+					elif int(l) == 1:
+						shift += 1
+						normalised = '1.' + fractional[shift:]
+						shift *= -1
+						return normalised, shift
+
 class Utilities(object):
 	def __init__(self):
 		pass
@@ -323,6 +363,15 @@ class UI(object):
 			if nc.validate(user_input, input_base, output_base):
 				output = nr.twos_comp(user_input)
 
+		elif int(function_code)==5:
+			input_base=2
+			user_input = input('Number to normalise (Binary): ')
+			i,f = user_input.split('.')
+			input_to_check = i+f
+
+			if nc.validate(input_to_check, input_base, output_base=2):
+				output,shift = nr.normalise_binary(user_input)
+				output = '{} x 2^{}'.format(output,shift)
 
 		print('Results: ', output)
 
