@@ -153,6 +153,88 @@ class NumberConv(object):
 
 		return results
 
+class NumberRepresentations(object):
+
+	def __init__(self):
+		pass
+
+	def validate(self, user_input, input_base):
+		validation_dict = {
+			2: '.01',
+			8: '.01234567',
+			10: '.0123456789',
+			16: '.0123456789abcdef'
+		}
+
+		# 1) Validate input base
+		if int(input_base) not in validation_dict.keys():
+			print('The input base is not permitted. Only 2, 8, 10 and 16 are accepted')
+			return False
+
+		# 2) Validate input alignment with base
+		for i in str(user_input):
+			if i not in validation_dict[input_base]:
+				print('The input number does not match with the input base you entered')
+				return False
+
+		return True
+
+	# def format_number(self,input_number,format,input_base=2):
+	# 	formats = ['unsigned','sign_and_mag','twos_comp']
+	#
+	# 	if self.validate(user_input,input_base):
+	# 		if format in formats:
+	# 			func = globals().get(format)
+	# 			format(user_input)
+	#
+	# def unsigned(self,input_number):
+	# 	pass
+	#
+	# def sign_and_mag(self,input_number):
+	# 	pass
+
+	def twos_comp(self, input_number):
+		'''
+		Conver a binary bit pattern (e.g. 1010110) to Two's Complement form
+		:param input_number: binary bit pattern
+		:return: 'xxxxx':string
+		'''
+		input_number = input_number[::-1]
+		flip = False
+		twos = ''
+		for i in input_number:
+			if int(i) == 1 and flip == False:
+				flip = True
+				twos += '1'
+				continue
+			if flip:
+				twos += str(int(i) ^ 1)
+			else:
+				twos += str(i)
+		return twos[::-1]
+
+class Utilities(object):
+	def __init__(self):
+		pass
+
+	def main_menue(self):
+		functions = {1: 'Convert Number systems (bases:2,8,10,16)',
+					 2: 'Unsigned Binary Representation',
+					 3: 'Sign & Magnitude Representation',
+					 4: "Two's Complement Representation",
+					 5: 'Binary Normalisation (1.xxx)',
+					 6: 'Floating-point representation (IEEE_127/32-bit)'}
+		colwidth = 55
+		dashes = '-' * colwidth
+		print('\n+{}+'.format(dashes))
+		print('|{}|'.format('List of functions (choose by number)'.center(colwidth)))
+		print('+{}+'.format(dashes))
+		for i, f in functions.items():
+			print('| [{}] {}|'.format(i, f.ljust(colwidth - 5, ' ')))
+			print('|{}|'.format(''.ljust(colwidth, ' ')))
+		print('| [q] {}|'.format('Quit'.ljust(colwidth - 5, ' ')))
+		print('+{}+\n'.format(dashes))
+
 class color:
    PURPLE = '\033[95m'
    CYAN = '\033[96m'
@@ -165,29 +247,87 @@ class color:
    UNDERLINE = '\033[4m'
    END = '\033[0m'
 
-if __name__=='__main__':
-	EnterMore = True
-	nc = NumberConv()
 
-	while EnterMore:
-		print('============================================')
-		input_base = int(input('Input Base (2,8,16,10): '))
-		output_base = int(input('Output Base (2,8,16,10): '))
-		user_input = input('Number to convert: ')
-		#output=None
-		if nc.validate(user_input,input_base,output_base):
-			if input_base==10:
-				output = nc.decimal_to_any(str(user_input), output_base)
-			elif output_base==10:
-				output = nc.any_to_decimal(str(user_input), input_base)
-			else:
-				result = nc.any_to_decimal(user_input, input_base)
-				output = nc.decimal_to_any(result, output_base)
+class UI(object):
+	def __init__(self):
 
-			print('The output: ',output)
-			print('============================================')
-			repeatq = input('Do you want to continue?')
-			if repeatq.lower() in ['1','y','yes','yep']:
-				EnterMore=True
+		self.main_flow()
+
+	def main_flow(self):
+		nc = NumberConv()
+		utils = Utilities()
+		nr = NumberRepresentations()
+
+		utils.main_menue()
+
+		function_code = input('Please enter function code from the above menue: ')
+
+		EnterMore = True
+
+		if int(function_code) == 1:
+			input_base = int(input('Input Base (2,8,16,10): '))
+			output_base = int(input('Output Base (2,8,16,10): '))
+			user_input = input('Number to convert: ')
+
+			if nc.validate(user_input, input_base, output_base):
+				if input_base == 10:
+					output = nc.decimal_to_any(str(user_input), output_base)
+				elif output_base == 10:
+					output = nc.any_to_decimal(str(user_input), input_base)
+				else:
+					result = nc.any_to_decimal(user_input, input_base)
+					output = nc.decimal_to_any(result, output_base)
+
+		elif int(function_code) == 2:
+			input_base = int(input('Input Base (8,16,10): '))
+			output_base = 2
+			user_input = input('Number to convert: ')
+
+			if nc.validate(user_input, input_base, output_base):
+				if input_base == 10:
+					output = nc.decimal_to_any(str(user_input), output_base)
+				else:
+					result = nc.any_to_decimal(user_input, input_base)
+					output = nc.decimal_to_any(result, output_base)
+
+		# SING AND MAGNITUDE
+		elif int(function_code)==3:
+
+			input_base = int(input('Input Base (8,16,10): '))
+			output_base = 2
+
+			#Check sing of the input
+			user_input = input('Number to convert: ')
+
+			if user_input[0]=='-':
+				user_input=user_input[1:]
+				s='1'
 			else:
-				EnterMore=False
+				s='0'
+
+			if nc.validate(user_input, input_base, output_base):
+				if input_base == 10:
+					output = nc.decimal_to_any(str(user_input), output_base)
+				else:
+					result = nc.any_to_decimal(user_input, input_base)
+					output = nc.decimal_to_any(result, output_base)
+			output = s+output
+
+		print('Results: ', output)
+
+	# while EnterMore:
+	# print('============================================')
+
+
+
+	# print('The output: ',output)
+	# print('============================================')
+	# repeatq = input('Do you want to continue?')
+	# if repeatq.lower() in ['1','y','yes','yep']:
+	# EnterMore=True
+	# else:
+	# EnterMore=False
+
+
+if __name__ == '__main__':
+	UI()
