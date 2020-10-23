@@ -2,7 +2,13 @@
 A Python-based little tool for number conversion between number systems (Decimal, Binary, Octal, Hexadecimal).<br/>
 Python 3.x
 
+## Available Functions:
+1. Conversion from/to numbers in Decimal,Binary,Octal, Hexadecimal.
+2. Show binary representation in Unsigned, Sign-and-Magnitude, and Two's Complements.
+3. Binary normalisation (1.xxx)
+4. Floating-point representation (Excess 127/32-bit)
 <br/>
+
 ## Usage 
 The file can be used in two ways:<br/>
 1. Direct double clicking, and follow instructions.
