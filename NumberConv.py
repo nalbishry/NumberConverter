@@ -263,7 +263,7 @@ class Utilities(object):
 					 3: 'Sign & Magnitude Representation',
 					 4: "Two's Complement Representation",
 					 5: 'Binary Normalisation (1.xxx)',
-					 6: 'Floating-point representation (IEEE_127/32-bit)'}
+					 6: '*Floating-point representation (IEEE_127/32-bit)'}
 		colwidth = 55
 		dashes = '-' * colwidth
 		print('\n+{}+'.format(dashes))
@@ -353,6 +353,7 @@ class UI(object):
 					output = nc.decimal_to_any(result, output_base)
 			output = s+output
 
+		# TWO'S COMPLEMENT
 		elif int(function_code)==4:
 			input_base = 2
 			output_base = 2
@@ -363,11 +364,16 @@ class UI(object):
 			if nc.validate(user_input, input_base, output_base):
 				output = nr.twos_comp(user_input)
 
+		# BIANRY NORMALISATION
 		elif int(function_code)==5:
 			input_base=2
 			user_input = input('Number to normalise (Binary): ')
-			i,f = user_input.split('.')
-			input_to_check = i+f
+
+			try:
+				i,f = user_input.split('.')
+				input_to_check = i+f
+			except:
+				input_to_check = user_input
 
 			if nc.validate(input_to_check, input_base, output_base=2):
 				output,shift = nr.normalise_binary(user_input)
