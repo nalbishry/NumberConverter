@@ -15,16 +15,20 @@ class NumberConv(object):
 			16:'.0123456789abcdef'
 		}
 
-		# 1) Validate input base
+		# 1) Check sign
+		if str(user_input)[0]=='-':
+			user_input = user_input[1:]
+
+		# 2) Validate input base
 		if int(input_base) not in validation_dict.keys():
 			print('The input base is not permitted. Only 2, 8, 10 and 16 are accepted')
 			return False
 
-		# 2) Validate output base
+		# 3) Validate output base
 		if int(output_base) not in validation_dict.keys():
 			print('The Output base is not permitted. Only 2, 8, 10 and 16 are accepted')
 
-		# 3) Validate input alignment with base
+		# 4) Validate input alignment with base
 		for i in str(user_input):
 			if i not in validation_dict[input_base]:
 				print('The input number does not match with the input base you entered')
@@ -253,6 +257,26 @@ class NumberRepresentations(object):
 						shift *= -1
 						return normalised, shift
 
+	def decimal_to_127(self, input_number):
+		nc = NumberConv()
+		print('decimal_to_127(input_number):',input_number,type(input_number))
+
+		if str(input_number)[0] == '-':
+			s = '1'
+			input_number = input_number[1:]
+		else:
+			s = '0'
+		input_number = nc.decimal_to_any(input_number,2)
+		a, shift = self.normalise_binary(str(input_number))
+		print(a, shift)
+		e = shift + 127
+		e = nc.decimal_to_any(e, 2)
+		m = a.split('.')[1]
+		m = m.ljust(23, '0')
+
+		return '{} {} {}'.format(s, e.rjust(8, '0'), m)
+
+
 class Utilities(object):
 	def __init__(self):
 		pass
@@ -263,16 +287,19 @@ class Utilities(object):
 					 3: 'Sign & Magnitude Representation',
 					 4: "Two's Complement Representation",
 					 5: 'Binary Normalisation (1.xxx)',
-					 6: '*Floating-point representation (IEEE_127/32-bit)'}
+					 6: 'Floating-point representation (IEEE_127/32-bit)',
+					 0: 'Quit'}
 		colwidth = 55
 		dashes = '-' * colwidth
 		print('\n+{}+'.format(dashes))
 		print('|{}|'.format('List of functions (choose by number)'.center(colwidth)))
 		print('+{}+'.format(dashes))
+		print('|{}|'.format(''.ljust(colwidth, ' ')))
 		for i, f in functions.items():
+
 			print('| [{}] {}|'.format(i, f.ljust(colwidth - 5, ' ')))
 			print('|{}|'.format(''.ljust(colwidth, ' ')))
-		print('| [q] {}|'.format('Quit'.ljust(colwidth - 5, ' ')))
+		#print('| [q] {}|'.format('Quit'.ljust(colwidth - 5, ' ')))
 		print('+{}+\n'.format(dashes))
 
 class color:
@@ -298,89 +325,120 @@ class UI(object):
 		utils = Utilities()
 		nr = NumberRepresentations()
 
-		utils.main_menue()
-
-		function_code = input('Please enter function code from the above menue: ')
-
 		EnterMore = True
+		output=''
+		while EnterMore:
+			utils.main_menue()
+			function_code = input('Please enter function code from the above menue: ')
 
-		if int(function_code) == 1:
-			input_base = int(input('Input Base (2,8,16,10): '))
-			output_base = int(input('Output Base (2,8,16,10): '))
-			user_input = input('Number to convert: ')
+			if int(function_code) == 1:
+				input_base = int(input('Input Base (2,8,16,10): '))
+				output_base = int(input('Output Base (2,8,16,10): '))
+				user_input = input('Number to convert: ')
 
-			if nc.validate(user_input, input_base, output_base):
-				if input_base == 10:
-					output = nc.decimal_to_any(str(user_input), output_base)
-				elif output_base == 10:
-					output = nc.any_to_decimal(str(user_input), input_base)
+				if nc.validate(user_input, input_base, output_base):
+					if input_base == 10:
+						output = nc.decimal_to_any(str(user_input), output_base)
+					elif output_base == 10:
+						output = nc.any_to_decimal(str(user_input), input_base)
+					else:
+						result = nc.any_to_decimal(user_input, input_base)
+						output = nc.decimal_to_any(result, output_base)
+
+			elif int(function_code) == 2:
+				input_base = int(input('Input Base (8,16,10): '))
+				output_base = 2
+				user_input = input('Number to convert: ')
+
+				if nc.validate(user_input, input_base, output_base):
+					if input_base == 10:
+						output = nc.decimal_to_any(str(user_input), output_base)
+					else:
+						result = nc.any_to_decimal(user_input, input_base)
+						output = nc.decimal_to_any(result, output_base)
+
+			# SING AND MAGNITUDE
+			elif int(function_code)==3:
+
+				input_base = int(input('Input Base (8,16,10): '))
+				output_base = 2
+
+				#Check sing of the input
+				user_input = input('Number to convert: ')
+
+				if user_input[0]=='-':
+					user_input=user_input[1:]
+					s='1'
 				else:
-					result = nc.any_to_decimal(user_input, input_base)
-					output = nc.decimal_to_any(result, output_base)
+					s='0'
 
-		elif int(function_code) == 2:
-			input_base = int(input('Input Base (8,16,10): '))
-			output_base = 2
-			user_input = input('Number to convert: ')
+				if nc.validate(user_input, input_base, output_base):
+					if input_base == 10:
+						output = nc.decimal_to_any(str(user_input), output_base)
+					else:
+						result = nc.any_to_decimal(user_input, input_base)
+						output = nc.decimal_to_any(result, output_base)
+				output = s+output
 
-			if nc.validate(user_input, input_base, output_base):
-				if input_base == 10:
-					output = nc.decimal_to_any(str(user_input), output_base)
-				else:
-					result = nc.any_to_decimal(user_input, input_base)
-					output = nc.decimal_to_any(result, output_base)
+			# TWO'S COMPLEMENT
+			elif int(function_code)==4:
+				input_base = 2
+				output_base = 2
 
-		# SING AND MAGNITUDE
-		elif int(function_code)==3:
+				# Check sing of the input
+				user_input = input('Number to format (Binary): ')
 
-			input_base = int(input('Input Base (8,16,10): '))
-			output_base = 2
+				if nc.validate(user_input, input_base, output_base):
+					output = nr.twos_comp(user_input)
 
-			#Check sing of the input
-			user_input = input('Number to convert: ')
+			# BIANRY NORMALISATION
+			elif int(function_code)==5:
+				input_base=2
+				user_input = input('Number to normalise (Binary): ')
 
-			if user_input[0]=='-':
-				user_input=user_input[1:]
-				s='1'
+				try:
+					i,f = user_input.split('.')
+					input_to_check = i+f
+				except:
+					input_to_check = user_input
+
+				if nc.validate(input_to_check, input_base, output_base=2):
+					output,shift = nr.normalise_binary(user_input)
+					output = '{} x 2^{}'.format(output,shift)
+
+
+			# Floating-Point IEEE 127
+			elif int(function_code)==6:
+				input_base = int(input('Input Base (8,16,10): '))
+				output_base = 2
+				user_input = input('Number to 127 format: ')
+
+				if nc.validate(user_input, input_base, output_base):
+
+					#Accept decimal only
+					if input_base == 10:
+						output = nr.decimal_to_127(user_input)
+					else:
+						print('Error: Accept only decimal')
+
+			#EXIT
+			elif int(function_code)==0:
+				print('======== GOOD BYE ======')
+				EnterMore = False
+				break
+
+
+			# PRINT FINAL OUTPUT
+			print('Results: ', output)
+
+			repeatq = input('Do you want to continue? y/n: ')
+			if repeatq.lower() in ['1','y','yes','yep']:
+				EnterMore=True
 			else:
-				s='0'
+				EnterMore=False
 
-			if nc.validate(user_input, input_base, output_base):
-				if input_base == 10:
-					output = nc.decimal_to_any(str(user_input), output_base)
-				else:
-					result = nc.any_to_decimal(user_input, input_base)
-					output = nc.decimal_to_any(result, output_base)
-			output = s+output
 
-		# TWO'S COMPLEMENT
-		elif int(function_code)==4:
-			input_base = 2
-			output_base = 2
-
-			# Check sing of the input
-			user_input = input('Number to format (Binary): ')
-
-			if nc.validate(user_input, input_base, output_base):
-				output = nr.twos_comp(user_input)
-
-		# BIANRY NORMALISATION
-		elif int(function_code)==5:
-			input_base=2
-			user_input = input('Number to normalise (Binary): ')
-
-			try:
-				i,f = user_input.split('.')
-				input_to_check = i+f
-			except:
-				input_to_check = user_input
-
-			if nc.validate(input_to_check, input_base, output_base=2):
-				output,shift = nr.normalise_binary(user_input)
-				output = '{} x 2^{}'.format(output,shift)
-
-		print('Results: ', output)
-
+		return True
 	# while EnterMore:
 	# print('============================================')
 
