@@ -55,10 +55,10 @@ class NumberConv(object):
 		else:
 			fractional = 0
 
-		print('Converting {} from base {} to base {}'.format(user_input, 10, output_base))
-		print('Integral part:', integer)
+		print('\nConverting {} from base {} to base {}'.format(user_input, 10, output_base))
+		print('\nIntegral part:', integer)
 		print('Fractional part:', fractional)
-		print(color.RED + '-------Integral-------' + color.END)
+		print('\n------------- Integral --------------')
 
 		# Integeral part
 		i = 0
@@ -84,7 +84,7 @@ class NumberConv(object):
 		# Fractional part
 		if fractional > 0:
 			results += '.'
-			print(color.RED + '-------Fractional-------' + color.END)
+			print('\n------------- Fractional --------------')
 			for i in range(10):
 				fractional0 = round(fractional, 6)
 				fractional *= output_base
@@ -118,10 +118,10 @@ class NumberConv(object):
 			fractional = str(parts[1])
 		else:
 			fractional = None
-		print('Converting {} from base {} to base {}'.format(user_input, input_base, 10))
+		print('\nConverting {} from base {} to base {}'.format(user_input, input_base, 10))
 		print('Integral part:', integer)
 		print('Fractional part:', fractional)
-		print(color.RED + '-------Integral-------' + color.END)
+		print('\n------------- Integral --------------')
 
 		# print('initial frac:',fractional)
 		integer = integer[::-1]
@@ -138,7 +138,7 @@ class NumberConv(object):
 		print('Results for integer:', results)
 
 		if fractional:
-			print(color.RED + '-------Fractional-------' + color.END)
+			print('\n------------- Fractional --------------')
 			results_fr = 0
 			for index, i in enumerate(fractional):
 
@@ -259,7 +259,7 @@ class NumberRepresentations(object):
 
 	def decimal_to_127(self, input_number):
 		nc = NumberConv()
-		print('decimal_to_127(input_number):',input_number,type(input_number))
+
 
 		if str(input_number)[0] == '-':
 			s = '1'
@@ -268,7 +268,7 @@ class NumberRepresentations(object):
 			s = '0'
 		input_number = nc.decimal_to_any(input_number,2)
 		a, shift = self.normalise_binary(str(input_number))
-		print(a, shift)
+
 		e = shift + 127
 		e = nc.decimal_to_any(e, 2)
 		m = a.split('.')[1]
@@ -300,6 +300,17 @@ class Utilities(object):
 			print('| [{}] {}|'.format(i, f.ljust(colwidth - 5, ' ')))
 			print('|{}|'.format(''.ljust(colwidth, ' ')))
 		#print('| [q] {}|'.format('Quit'.ljust(colwidth - 5, ' ')))
+		print('+{}+\n'.format(dashes))
+
+	def add_border(self,string,alignment='l',colwidth=55):
+		dashes = '-' * colwidth
+		print('\n+{}+'.format(dashes))
+		# print('|{}|'.format(''.ljust(colwidth, ' ')))
+		if alignment=='l':
+			print('|{}|'.format(string.ljust(colwidth, ' ')))
+		elif alignment=='c':
+			print('|{}|'.format(string.centre(colwidth, ' ')))
+
 		print('+{}+\n'.format(dashes))
 
 class color:
@@ -359,8 +370,8 @@ class UI(object):
 
 			# SING AND MAGNITUDE
 			elif int(function_code)==3:
-
-				input_base = int(input('Input Base (8,16,10): '))
+				print('** Accepts only decimal for now **')
+				input_base = 10 #int(input('Input Base (8,16,10): '))
 				output_base = 2
 
 				#Check sing of the input
@@ -378,10 +389,11 @@ class UI(object):
 					else:
 						result = nc.any_to_decimal(user_input, input_base)
 						output = nc.decimal_to_any(result, output_base)
-				output = s+output
+				output = s+str(output)
 
 			# TWO'S COMPLEMENT
 			elif int(function_code)==4:
+				print('** Accepts only Binary for now **')
 				input_base = 2
 				output_base = 2
 
@@ -409,9 +421,10 @@ class UI(object):
 
 			# Floating-Point IEEE 127
 			elif int(function_code)==6:
-				input_base = int(input('Input Base (8,16,10): '))
+				print('** Accepts only decimal for now **')
+				input_base = 10
 				output_base = 2
-				user_input = input('Number to 127 format: ')
+				user_input = input('Number to format: ')
 
 				if nc.validate(user_input, input_base, output_base):
 
@@ -429,7 +442,11 @@ class UI(object):
 
 
 			# PRINT FINAL OUTPUT
-			print('Results: ', output)
+			utils.add_border('RESULTS|   {}'.format(output))
+
+			# print('| [q] {}|'.format('Quit'.ljust(colwidth - 5, ' ')))
+			#print('+{}+\n'.format(dashes))
+			#print('Results: ', output)
 
 			repeatq = input('Do you want to continue? y/n: ')
 			if repeatq.lower() in ['1','y','yes','yep']:
@@ -437,20 +454,9 @@ class UI(object):
 			else:
 				EnterMore=False
 
-
+			output=None
 		return True
-	# while EnterMore:
-	# print('============================================')
 
-
-
-	# print('The output: ',output)
-	# print('============================================')
-	# repeatq = input('Do you want to continue?')
-	# if repeatq.lower() in ['1','y','yes','yep']:
-	# EnterMore=True
-	# else:
-	# EnterMore=False
 
 
 if __name__ == '__main__':
