@@ -313,6 +313,17 @@ class UI(object):
 					output = nc.decimal_to_any(result, output_base)
 			output = s+output
 
+		elif int(function_code)==4:
+			input_base = 2
+			output_base = 2
+
+			# Check sing of the input
+			user_input = input('Number to format (Binary): ')
+
+			if nc.validate(user_input, input_base, output_base):
+				output = nr.twos_comp(user_input)
+
+
 		print('Results: ', output)
 
 	# while EnterMore:
