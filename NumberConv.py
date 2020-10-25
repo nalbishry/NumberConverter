@@ -282,7 +282,7 @@ class Utilities(object):
 		pass
 
 	def main_menue(self):
-		functions = {1: 'Convert Number systems (bases:2,8,10,16)',
+		functions = {1: 'Convert unisigned numbers (bases:2,8,10,16)',
 					 2: 'Unsigned Binary Representation',
 					 3: 'Sign & Magnitude Representation',
 					 4: "Two's Complement Representation",
