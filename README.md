@@ -2,6 +2,9 @@
 A Python-based little tool for number conversion between number systems (Decimal, Binary, Octal, Hexadecimal).<br/>
 Python 3.x
 
+
+<p align="center"><img src="./sample.png" alt="Word Cloud Scraped Image"/></p>
+
 ## Available Functions:
 1. Conversion from/to numbers in Decimal,Binary,Octal, Hexadecimal.
 2. Show binary representation in Unsigned, Sign-and-Magnitude, and Two's Complements.
